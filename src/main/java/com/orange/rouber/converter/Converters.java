@@ -63,7 +63,7 @@ public class Converters {
     public static TripDto toTripDto(Trip trip) {
         return TripDto.builder()
                 .price(trip.getPrice())
-                .rating(trip.getRating().longValue())
+                .rating(trip.getRating())
                 .start_lat(trip.getStartLocation().getX())
                 .start_long(trip.getStartLocation().getY())
                 .end_lat(trip.getEndLocation().getX())

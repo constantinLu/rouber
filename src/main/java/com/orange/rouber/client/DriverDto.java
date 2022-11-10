@@ -27,4 +27,7 @@ public class DriverDto {
     public Optional<Float> getRating() {
         return Optional.ofNullable(rating);
     }
+    public Float rating() {
+        return rating;
+    }
 }

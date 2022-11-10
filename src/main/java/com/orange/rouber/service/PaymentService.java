@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.orange.rouber.client.corepayments.PaymentStatusType.PENDING_AUTHORIZATION;
 import static com.orange.rouber.client.corepayments.PaymentStatusType.UNPROCESSED;
@@ -66,6 +68,19 @@ public class PaymentService {
         Assert.isTrue(originalPayment.getRequestId().equals(confirmedPayment.getRequestId()), "RequestId must be the same");
 
         paymentRepository.save(originalPayment.confirmPayment(confirmedPayment.getAmount(), confirmedPayment.getUpdatedDate()));
+    }
+
+    public List<CorePaymentDto> readDriverPayments(Long driverId) {
+        final var payments = paymentRepository.findPaymentByTrip_assignedTo_id(driverId);
+        final var requestIds = payments.stream()
+                .map(Payment::getRequestId)
+                .collect(Collectors.toList());
+
+        final var processedPayments = Objects.requireNonNull
+                (corePaymentService.getPayments(requestIds).getBody(),
+                        "Payment list cannot be null");
+
+        return processedPayments.getPayments();
     }
 
     private BigDecimal processAuthorizationAmount(BigDecimal tripPrice) {

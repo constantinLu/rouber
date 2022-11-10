@@ -13,5 +13,5 @@ INSERT INTO public.vehicles( id, name, brand, vin, license_plate, color, registe
  (2, 'Logan', 'Dacia', 'VZ21WGTS2342152', 'SV52SSS', 'Black', '2021-05-05', '2022-11-10 11:10:01.11313', 1, 'ACTIVE');
 
 
-INSERT INTO public.trips(id, price, start_lat, start_long, end_lat, end_long, user_id, driver_id, payment_id, rating) VALUES
-(1, 20.00, 111111.1111, 111111.1111, 11111.11111, 111111.11111, 1, null, null,	2);
+INSERT INTO public.trips(id, price, start_lat, start_long, end_lat, end_long, user_id, driver_id, payment_id, rating, start_trip, end_trip) VALUES
+(1, 20.00, 111111.1111, 111111.1111, 11111.11111, 111111.11111, 1, null, null, 2, null, null);

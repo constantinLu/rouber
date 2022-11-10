@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 
 @AllArgsConstructor
@@ -22,6 +23,10 @@ public class Trip {
     private BigDecimal price;
 
     private Float rating;
+
+    private LocalDateTime startTrip;
+
+    private LocalDateTime endTrip;
 
     @Embedded
     @AttributeOverrides({

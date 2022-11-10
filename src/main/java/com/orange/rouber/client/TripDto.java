@@ -12,7 +12,7 @@ public class TripDto {
 
     private BigDecimal price;
 
-    private Long rating;
+    private Float rating;
 
     private BigDecimal start_lat;
 

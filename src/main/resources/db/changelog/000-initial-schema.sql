@@ -68,6 +68,8 @@ CREATE TABLE public.trips
     driver_id           bigint,
     payment_id          bigInt,
     rating              real NOT NULL,
+    start_trip          timestamp,
+    end_trip            timestamp,
 
     CONSTRAINT trips_id PRIMARY KEY (id),
     CONSTRAINT user_fk FOREIGN KEY (user_id)
