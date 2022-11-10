@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.lang.Float.valueOf;
-
 public class Converters {
 
     public static Driver toDriver(DriverDto driverDto) {
@@ -48,14 +46,6 @@ public class Converters {
                 .endLocation(coordinates(tripDto.getEnd_lat(), tripDto.getEnd_long()))
                 .build();
     }
-
-    private static Point coordinates(BigDecimal latitude, BigDecimal longitude) {
-        return Point.builder()
-                .x(latitude)
-                .y(longitude)
-                .build();
-    }
-
 
     public static Vehicle toVehicle(VehicleDto vehicleDto) {
         return Vehicle.builder()
@@ -107,5 +97,12 @@ public class Converters {
         return vehicles.stream()
                 .map(Converters::toVehicleDto)
                 .collect(Collectors.toList());
+    }
+
+    private static Point coordinates(BigDecimal latitude, BigDecimal longitude) {
+        return Point.builder()
+                .x(latitude)
+                .y(longitude)
+                .build();
     }
 }

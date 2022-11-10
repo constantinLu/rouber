@@ -4,11 +4,10 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
+@Builder
 public class TripDto {
 
     private BigDecimal price;
@@ -16,9 +15,11 @@ public class TripDto {
     private Long rating;
 
     private BigDecimal start_lat;
+
     private BigDecimal start_long;
 
     private BigDecimal end_lat;
+
     private BigDecimal end_long;
 
     private Long requestedByUser;

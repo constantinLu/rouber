@@ -14,4 +14,4 @@ INSERT INTO public.vehicles( id, name, brand, vin, license_plate, color, registe
 
 
 INSERT INTO public.trips(id, price, start_lat, start_long, end_lat, end_long, user_id, driver_id, payment_id, rating) VALUES
-(1, 11.00, 111111.1111, 111111.1111, 11111.11111, 111111.11111, 1, null, null,	2);
+(1, 20.00, 111111.1111, 111111.1111, 11111.11111, 111111.11111, 1, null, null,	2);

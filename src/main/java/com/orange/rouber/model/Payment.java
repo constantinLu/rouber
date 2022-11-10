@@ -43,6 +43,20 @@ public class Payment {
     public Optional<LocalDateTime> getEndConfirmation() {
         return Optional.ofNullable(endConfirmation);
     }
+
+
+    public Payment confirmPayment(BigDecimal amount, LocalDateTime endConfirmation) {
+        return Payment.builder()
+                .id(this.getId())
+                .paidPrice(amount)
+                .trip(this.getTrip())
+                .startInitiation(this.startInitiation)
+                .endConfirmation(endConfirmation)
+                .requestId(this.getRequestId())
+                .build();
+    }
+
+
 }
 
 

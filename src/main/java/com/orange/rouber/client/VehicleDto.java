@@ -7,11 +7,10 @@ import java.time.LocalDateTime;
 
 import static com.orange.rouber.model.Vehicle.State;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
+@Builder
 public class VehicleDto {
 
     private String name;

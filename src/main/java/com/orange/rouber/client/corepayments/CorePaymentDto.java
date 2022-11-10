@@ -1,8 +1,9 @@
 package com.orange.rouber.client.corepayments;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Value;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -10,9 +11,10 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Builder
-@Value
 public class CorePaymentDto implements Serializable {
 
     BigDecimal amount;
@@ -23,7 +25,7 @@ public class CorePaymentDto implements Serializable {
 
     UUID requestId;
 
-    String paymentStatus;
+    PaymentStatusType paymentStatus;
 
     LocalDateTime updatedDate;
 

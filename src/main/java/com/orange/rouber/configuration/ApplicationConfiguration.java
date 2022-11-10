@@ -13,8 +13,4 @@ public class ApplicationConfiguration {
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
     }
-
-    private static final ObjectMapper objectMapper = new ObjectMapper()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
 }

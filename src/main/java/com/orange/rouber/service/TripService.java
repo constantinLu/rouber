@@ -5,6 +5,7 @@ import com.orange.rouber.repository.DriverRepository;
 import com.orange.rouber.repository.TripRepository;
 import com.orange.rouber.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.validation.ValidationException;
 import java.util.List;
@@ -48,6 +49,12 @@ public class TripService {
             tripRepository.save(trip);
         });
 
+    }
+
+    public void endTrip(Long tripId, Long driverId) {
+        final var currentTrip = tripRepository.findById(tripId).orElseThrow();
+        Assert.isTrue(currentTrip.getAssignedTo().getId().equals(driverId), "Driver must be the same");
+        paymentService.confirmPayment(currentTrip.getPayment().getId());
     }
 
     public List<Trip> driverTrips(Long driverId) {

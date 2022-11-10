@@ -1,19 +1,21 @@
 package com.orange.rouber.client;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
+@Builder
 public class RatingDto {
 
-    Float rating;
+    private Float rating;
 
-    Optional<Long> driverId;
+    private Optional<Long> driverId;
 
-    Optional<Long> tripId;
+    private Optional<Long> tripId;
 }

@@ -5,12 +5,15 @@ import com.orange.rouber.model.Payment;
 import com.orange.rouber.model.Trip;
 import com.orange.rouber.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.orange.rouber.client.corepayments.PaymentStatus.PENDING_AUTHORIZATION;
+import static com.orange.rouber.client.corepayments.PaymentStatusType.PENDING_AUTHORIZATION;
+import static com.orange.rouber.client.corepayments.PaymentStatusType.UNPROCESSED;
 
 @Service
 public class PaymentService {
@@ -28,22 +31,44 @@ public class PaymentService {
         final var unProcessedPayment = CorePaymentDto.builder()
                 .amount(processAuthorizationAmount(trip.getPrice()))
                 .requestId(UUID.randomUUID())
-                .paymentStatus(PENDING_AUTHORIZATION.name())
+                .paymentStatus(UNPROCESSED)
                 .reason(Optional.of("Start of trip authorization"))
                 .build();
 
         final var processedPayment = corePaymentService.authorizePayment(unProcessedPayment);
 
         final var payment = Payment.builder()
-                .paidPrice(trip.getPrice())
+                .paidPrice(processedPayment.getBody().getAmount())
                 .trip(trip)
                 .startInitiation(processedPayment.getBody().getCreatedDate())
+                .requestId(processedPayment.getBody().getRequestId())
                 .build();
         return paymentRepository.save(payment);
     }
 
+    public void confirmPayment(Long paymentId) {
+        final var originalPayment = paymentRepository.findById(paymentId).orElseThrow();
+        Assert.isTrue(originalPayment.getStartInitiation().isPresent(), "Payment must be AUTHORIZED");
+        Assert.isTrue(originalPayment.getEndConfirmation().isEmpty(), "Payment should not be CONFIRMED YET");
+        Assert.isTrue(originalPayment.getPaidPrice().longValue() < originalPayment.getTrip().getPrice().longValue(), "Pre authorized amount should be smaller");
+
+        final var authorizedPaymentRequest = CorePaymentDto.builder()
+                .amount(originalPayment.getTrip().getPrice())
+                .requestId(originalPayment.getRequestId())
+                .paymentStatus(PENDING_AUTHORIZATION)
+                .reason(Optional.of("Trip ended. Confirmation of payment required"))
+                .build();
+
+        final var confirmedPaymentResponse = corePaymentService.confirmPayment(authorizedPaymentRequest);
+        final var confirmedPayment = Objects.requireNonNull(confirmedPaymentResponse.getBody());
+
+        Assert.isTrue(originalPayment.getTrip().getPrice().equals(confirmedPayment.getAmount()), "Amount payed and amount processed must be equal");
+        Assert.isTrue(originalPayment.getRequestId().equals(confirmedPayment.getRequestId()), "RequestId must be the same");
+
+        paymentRepository.save(originalPayment.confirmPayment(confirmedPayment.getAmount(), confirmedPayment.getUpdatedDate()));
+    }
 
     private BigDecimal processAuthorizationAmount(BigDecimal tripPrice) {
-        return tripPrice.min(tripPrice);
+        return (tripPrice.multiply(tripPrice.divide(BigDecimal.valueOf(100.0f))));
     }
 }

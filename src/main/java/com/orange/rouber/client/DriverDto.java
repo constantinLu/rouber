@@ -7,11 +7,10 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.Optional;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
+@Builder
 public class DriverDto {
 
     private String name;
