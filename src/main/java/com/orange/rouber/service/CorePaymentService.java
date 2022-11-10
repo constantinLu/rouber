@@ -17,7 +17,6 @@ import java.util.UUID;
 
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
 public class CorePaymentService {
@@ -43,10 +42,8 @@ public class CorePaymentService {
     }
 
     public ResponseEntity<CorePaymentResponse> getPayments(List<UUID> requestIds) {
-        final var request = new HttpEntity<>(header());
-        final var asd = List.of(UUID.randomUUID(), UUID.randomUUID());
-        requestIds.addAll(asd);
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(CORE_PAYMENTS)
+        final var httpEntity = new HttpEntity<>(header());
+        String url = UriComponentsBuilder.fromHttpUrl(CORE_PAYMENTS)
                 .queryParam("requestIds", "{requestIds}")
                 .encode()
                 .toUriString();
@@ -54,7 +51,7 @@ public class CorePaymentService {
         Map<String, List<UUID>> params = new HashMap<>();
         params.put("requestIds", requestIds);
 
-        return restTemplate.exchange(urlTemplate, GET, request, CorePaymentResponse.class, params);
+        return restTemplate.exchange(url, GET, httpEntity, CorePaymentResponse.class, params);
     }
 
     private HttpEntity<CorePaymentDto> createRequestEntity(CorePaymentDto request) {

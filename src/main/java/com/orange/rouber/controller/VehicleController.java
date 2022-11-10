@@ -27,8 +27,7 @@ public class VehicleController {
     }
 
     @GetMapping("/history")
-    @ResponseStatus(HttpStatus.CREATED)
-    public List<VehicleDto> vehiclesHistory() {
+    public List<VehicleDto> getVehicleHistory() {
         return toVehicleDtos(vehicleService.getVehicleHistory());
     }
 }

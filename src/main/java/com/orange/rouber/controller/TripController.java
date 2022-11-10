@@ -10,9 +10,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ValidationException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.orange.rouber.converter.Converters.toTrip;
@@ -28,6 +26,7 @@ public class TripController {
         this.tripService = tripService;
     }
 
+
     /**
      * All available trips
      */
@@ -41,21 +40,23 @@ public class TripController {
      * Any driver can see he`s list of trips
      */
     @GetMapping("/drivers/{driverId}")
-    public List<TripDto> driverTrips(@PathVariable Long driverId) {
-        return toTripDtos(tripService.driverTrips(driverId));
+    public List<TripDto> getDriverTrips(@PathVariable Long driverId) {
+        return toTripDtos(tripService.getDriverTrips(driverId));
     }
+
 
     /**
      * Driver rating by trip
      */
     @GetMapping("{tripId}/ratings")
-    public TripDto driverRating(@PathVariable Long tripId, @RequestBody TripDto tripDto) {
+    public TripDto getDriverRatings(@PathVariable Long tripId, @RequestBody TripDto tripDto) {
         Assert.notNull(tripDto.getAssignedTo(), "Driver ID: cannot be null");
-        final var trip = tripService.driverRatingByTrip(tripId, tripDto.getAssignedTo());
+        final var trip = tripService.getDriverRatingsByTrip(tripId, tripDto.getAssignedTo());
         return TripDto.builder()
                 .rating(trip.getRating())
                 .build();
     }
+
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
@@ -63,6 +64,7 @@ public class TripController {
         assert tripDto.getRequestedByUser() != null;
         tripService.createTrip(toTrip(tripDto), tripDto.getRequestedByUser());
     }
+
 
     /**
      * Used for triggering the start of the trip and the finish.
@@ -81,6 +83,7 @@ public class TripController {
         }
     }
 
+
     /**
      * Rate the trip by the client (user)
      */
@@ -92,8 +95,12 @@ public class TripController {
         tripService.rateTrip(tripId, tripDto.getAssignedTo(), tripDto.getRating());
     }
 
+
+    /*
+     * added all statistics into one endpoint
+     */
     @GetMapping("/drivers/{driverId}/statistics")
-    public TripStatistics totalTripsPerPriceDay(@PathVariable Long driverId, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+    public TripStatistics getStatistics(@PathVariable Long driverId, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         final var now = LocalDate.now();
         Assert.isTrue(date.isBefore(LocalDate.now()) || date.isEqual(now), "Date must not be in the future");
         return tripService.calculateStatistics(driverId, date);

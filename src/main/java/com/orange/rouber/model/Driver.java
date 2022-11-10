@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
+import static com.orange.rouber.model.Vehicle.State.ACTIVE;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
@@ -35,4 +36,12 @@ public class Driver {
 
     @OneToMany(mappedBy = "assignedTo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Trip> trips;
+
+
+    public Vehicle activeVehicle() {
+        return vehicles.stream()
+                .filter(v -> v.state.equals(ACTIVE))
+                .findFirst()
+                .orElseThrow();
+    }
 }

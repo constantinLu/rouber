@@ -1,11 +1,16 @@
 package com.orange.rouber.controller;
 
 import com.orange.rouber.client.DriverDto;
+import com.orange.rouber.client.DriverProfileDto;
 import com.orange.rouber.converter.Converters;
 import com.orange.rouber.service.DriverService;
+import com.orange.rouber.service.TripService;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+
+import static com.orange.rouber.converter.Converters.toDriverDto;
+import static com.orange.rouber.converter.Converters.toVehicleDto;
 
 @RestController
 @RequestMapping("/drivers")
@@ -13,8 +18,11 @@ public class DriverController {
 
     private final DriverService driverService;
 
-    public DriverController(DriverService driverService) {
+    private final TripService tripService;
+
+    public DriverController(DriverService driverService, TripService tripService) {
         this.driverService = driverService;
+        this.tripService = tripService;
     }
 
     @PostMapping
@@ -37,10 +45,21 @@ public class DriverController {
      * Current rating of the driver
      */
     @GetMapping("{driverId}/ratings")
-    public DriverDto driverRating(@PathVariable Long driverId) {
-        final var driver = driverService.ratingByDriver(driverId);
+    public DriverDto getDriverRating(@PathVariable Long driverId) {
+        final var driver = driverService.getDriver(driverId);
         return DriverDto.builder()
                 .rating(driver.getRating())
+                .build();
+    }
+
+    @GetMapping("{driverId}/profile")
+    public DriverProfileDto getDriveProfileInfo(@PathVariable Long driverId) {
+        final var driver = driverService.getDriver(driverId);
+        final var avgPricePerTrip = tripService.calculateAverageTripPrice(driverId);
+        return DriverProfileDto.builder()
+                .driverDto(toDriverDto(driver))
+                .vehicleDto(toVehicleDto(driver.activeVehicle()))
+                .averageTripPrice(avgPricePerTrip)
                 .build();
     }
 }

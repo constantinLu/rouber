@@ -28,7 +28,8 @@ public class TripService {
 
     private final PaymentService paymentService;
 
-    public TripService(TripRepository tripRepository, UserRepository userRepository, DriverService driverService, PaymentService paymentService) {
+    public TripService(TripRepository tripRepository, UserRepository userRepository, DriverService driverService,
+                       PaymentService paymentService) {
         this.tripRepository = tripRepository;
         this.userRepository = userRepository;
         this.driverService = driverService;
@@ -72,11 +73,11 @@ public class TripService {
         tripRepository.save(currentTrip);
     }
 
-    public List<Trip> driverTrips(Long driverId) {
+    public List<Trip> getDriverTrips(Long driverId) {
         return findByDriverId(driverId);
     }
 
-    public Trip driverRatingByTrip(Long tripId, Long driverId) {
+    public Trip getDriverRatingsByTrip(Long tripId, Long driverId) {
         return findByTripAndDriverIds(tripId, driverId);
     }
 
@@ -95,8 +96,13 @@ public class TripService {
         return TripStatistics.builder()
                 .totalTimePerDay(LocalTime.ofSecondOfDay(calculateTotalTimePerDay(trips)))
                 .totalPricePerDay(BigDecimal.valueOf(calculateTotalPricePerDay(trips)))
-                .avgPricePerDay(BigDecimal.valueOf(calculateAveragePricePerDay(trips)))
+                .avgPricePerDay(BigDecimal.valueOf(calculateAveragePrice(trips)))
                 .build();
+    }
+
+    public BigDecimal calculateAverageTripPrice(Long driverId) {
+        final var trips = findByDriverId(driverId);
+        return BigDecimal.valueOf(calculateAveragePrice(trips));
     }
 
     private static long calculateTotalTimePerDay(List<Trip> trips) {
@@ -114,7 +120,7 @@ public class TripService {
                 .sum();
     }
 
-    private static double calculateAveragePricePerDay(List<Trip> trips) {
+    private static double calculateAveragePrice(List<Trip> trips) {
         return trips.stream()
                 .mapToDouble(t -> t.getPrice().doubleValue())
                 .average()

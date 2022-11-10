@@ -18,17 +18,13 @@ public class DriverService {
         driverRepository.save(driver);
     }
 
-    public Driver ratingByDriver(Long driverId) {
-        return getDriver(driverId);
-    }
-
     public void rateDriver(Long driverId, Float rate) {
         final var driver = getDriver(driverId);
         driver.setRating(rate);
         driverRepository.save(driver);
     }
 
-    protected Driver getDriver(Long driverId) {
+    public Driver getDriver(Long driverId) {
         return driverRepository.findById(driverId).orElseThrow();
     }
 
@@ -50,6 +46,7 @@ public class DriverService {
         final var averageRating = sum / size;
 
         driver.setRating(averageRating);
+
         driverRepository.save(driver);
     }
 }
