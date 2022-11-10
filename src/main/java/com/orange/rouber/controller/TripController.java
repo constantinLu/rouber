@@ -44,7 +44,6 @@ public class TripController {
         return toTripDtos(tripService.getDriverTrips(driverId));
     }
 
-
     /**
      * Driver rating by trip
      */

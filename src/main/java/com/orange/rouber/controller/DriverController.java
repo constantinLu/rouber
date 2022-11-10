@@ -2,12 +2,16 @@ package com.orange.rouber.controller;
 
 import com.orange.rouber.client.DriverDto;
 import com.orange.rouber.client.DriverProfileDto;
+import com.orange.rouber.client.TripInfoDto;
 import com.orange.rouber.converter.Converters;
 import com.orange.rouber.service.DriverService;
 import com.orange.rouber.service.TripService;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.orange.rouber.converter.Converters.toDriverDto;
 import static com.orange.rouber.converter.Converters.toVehicleDto;
@@ -40,6 +44,21 @@ public class DriverController {
         driverService.rateDriver(driverId, driverDto.rating());
     }
 
+
+    /**
+     * List trip info with payments attached
+     */
+    @GetMapping("/{driverId}/trips")
+    public List<TripInfoDto> getDriverTripInfo(@PathVariable Long driverId) {
+        final var trips = tripService.getDriverTrips(driverId);
+        return trips.stream()
+                .map(t -> TripInfoDto.builder()
+                        .tripDto(Converters.toTripDto(t))
+                        .paymentDto(Converters.toPaymentDto(t.getPayment()))
+                        .build())
+                .collect(Collectors.toList());
+
+    }
 
     /**
      * Current rating of the driver

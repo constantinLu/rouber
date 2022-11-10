@@ -1,9 +1,6 @@
 package com.orange.rouber.converter;
 
-import com.orange.rouber.client.DriverDto;
-import com.orange.rouber.client.TripDto;
-import com.orange.rouber.client.UserDto;
-import com.orange.rouber.client.VehicleDto;
+import com.orange.rouber.client.*;
 import com.orange.rouber.model.*;
 
 import java.math.BigDecimal;
@@ -90,6 +87,15 @@ public class Converters {
                 .registerDate(vehicle.getRegisterDate())
                 .createdDate(vehicle.getCreatedDate())
                 .state(vehicle.getState())
+                .build();
+    }
+
+    public static PaymentDto toPaymentDto(Payment payment) {
+        return PaymentDto.builder()
+                .paidPrice(payment.getPaidPrice())
+                .startInitiation(payment.getStartInitiation().orElse(null))
+                .endConfirmation(payment.getEndConfirmation().orElse(null))
+                .requestId(payment.getRequestId())
                 .build();
     }
 
