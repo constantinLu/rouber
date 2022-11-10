@@ -1,28 +1,20 @@
-package com.orange.rouber.model;
+package com.orange.rouber.client;
 
 
+import com.orange.rouber.model.Trip;
 import lombok.*;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
-
-import static javax.persistence.CascadeType.ALL;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-@Table(name = "payments")
-@Entity(name = "payments")
-public class Payment {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class PaymentDto {
 
     private BigDecimal paidPrice;
 
@@ -30,11 +22,9 @@ public class Payment {
 
     private LocalDateTime endConfirmation;
 
-    private UUID requestId;
-
-    @OneToOne(mappedBy = "payment", cascade = ALL)
     private Trip trip;
 
+    private UUID requestId;
 
     public Optional<LocalDateTime> getStartInitiation() {
         return Optional.ofNullable(startInitiation);

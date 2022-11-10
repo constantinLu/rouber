@@ -7,20 +7,24 @@ import com.orange.rouber.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
+import java.util.List;
 
 @Service
 public class TripService {
 
-    TripRepository tripRepository;
+    private final TripRepository tripRepository;
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    DriverRepository driverRepository;
+    private final DriverRepository driverRepository;
 
-    public TripService(TripRepository tripRepository, UserRepository userRepository, DriverRepository driverRepository) {
+    private final PaymentService paymentService;
+
+    public TripService(TripRepository tripRepository, UserRepository userRepository, DriverRepository driverRepository, PaymentService paymentService) {
         this.tripRepository = tripRepository;
         this.userRepository = userRepository;
         this.driverRepository = driverRepository;
+        this.paymentService = paymentService;
     }
 
     public void createTrip(Trip trip, Long userId) {
@@ -38,7 +42,19 @@ public class TripService {
             } else {
                 throw new ValidationException("Driver already assigned");
             }
+
+            final var createdPayment = paymentService.createPayment(trip);
+            trip.setPayment(createdPayment);
             tripRepository.save(trip);
         });
+
+    }
+
+    public List<Trip> driverTrips(Long driverId) {
+        return tripRepository.findByAssignedTo_Id(driverId);
+    }
+
+    public Trip ratingByTrip(Long tripId, Long driverId) {
+        return tripRepository.findByIdAndAssignedTo_Id(tripId, driverId);
     }
 }

@@ -23,9 +23,9 @@ public class DriverDto {
 
     @Min(1)
     @Max(5)
-    private Integer rating;
+    private Float rating;
 
-    public Optional<Integer> getRating() {
+    public Optional<Float> getRating() {
         return Optional.ofNullable(rating);
     }
 }

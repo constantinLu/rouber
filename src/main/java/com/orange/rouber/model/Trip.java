@@ -45,5 +45,8 @@ public class Trip {
     @JoinColumn(name = "driver_id")
     private Driver assignedTo;
 
+    @OneToOne
+    private Payment payment;
+
 }
 

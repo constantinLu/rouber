@@ -16,4 +16,8 @@ public class DriverService {
     public void registerDriver(Driver driver) {
         driverRepository.save(driver);
     }
+
+    public Driver ratingByDriver(Long driverId) {
+        return driverRepository.findById(driverId).orElseThrow();
+    }
 }

@@ -21,4 +21,13 @@ public class DriverController {
     public void registerDriver(@RequestBody DriverDto driverDto) {
         driverService.registerDriver(Converters.toDriver(driverDto));
     }
+
+    @GetMapping("{driverId}/ratings")
+    public DriverDto driverRatings(@PathVariable Long driverId) {
+        final var driver = driverService.ratingByDriver(driverId);
+        return DriverDto.builder()
+                .rating(driver.getRating())
+                .build();
+
+    }
 }

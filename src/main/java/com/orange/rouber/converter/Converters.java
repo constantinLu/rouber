@@ -20,7 +20,14 @@ public class Converters {
                 .name(driverDto.getName())
                 .email(driverDto.getEmail())
                 .phoneNumber(driverDto.getPhoneNumber())
-                .rating(valueOf(driverDto.getRating().orElse(0)))
+                .rating(driverDto.getRating().orElse(0F))
+                .build();
+    }
+
+    public static DriverDto toDriverDto(Driver driver) {
+        return DriverDto.builder()
+                .name(driver.getName())
+                .email(driver.getEmail())
                 .build();
     }
 
@@ -61,6 +68,27 @@ public class Converters {
                 .createdDate(LocalDateTime.now())
                 .build();
     }
+
+
+    public static TripDto toTripDto(Trip trip) {
+        return TripDto.builder()
+                .price(trip.getPrice())
+                .rating(trip.getRating().longValue())
+                .start_lat(trip.getStartLocation().getX())
+                .start_long(trip.getStartLocation().getY())
+                .end_lat(trip.getEndLocation().getX())
+                .end_long(trip.getEndLocation().getY())
+                .requestedByUser(trip.getRequestedBy().getId())
+                .assignedTo(trip.getAssignedTo().getId())
+                .build();
+    }
+
+    public static List<TripDto> toTripDtos(List<Trip> trips) {
+        return trips.stream()
+                .map(Converters::toTripDto)
+                .collect(Collectors.toList());
+    }
+
 
     public static VehicleDto toVehicleDto(Vehicle vehicle) {
         return VehicleDto.builder()

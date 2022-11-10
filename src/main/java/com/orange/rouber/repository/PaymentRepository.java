@@ -1,9 +1,9 @@
 package com.orange.rouber.repository;
 
-import com.orange.rouber.model.Driver;
+import com.orange.rouber.model.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PaymentRepository extends JpaRepository<Driver, Long> {
+public interface PaymentRepository extends JpaRepository<Payment, Long> {
 }
