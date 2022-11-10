@@ -28,6 +28,8 @@ public class CorePaymentService {
     public ResponseEntity<CorePaymentDto> authorizePayment(CorePaymentDto payment) {
         final HttpHeaders headers = new HttpHeaders();
         // headers.add(jwtConfiguration.getAuthorizationHeader(), jwtConfiguration.getTokenPrefix() + TokenStorage.getToken());
+//        System.setProperty("proxyHost", "localhost.com");
+//        System.setProperty("proxyPort", "8080");
         HttpEntity<CorePaymentDto> requestEntity = createRequestEntity(payment);
         return restTemplate.exchange(AUTHORIZATION, POST, requestEntity, CorePaymentDto.class);
     }

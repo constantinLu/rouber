@@ -23,7 +23,7 @@ public class CorePaymentDto implements Serializable {
 
     UUID requestId;
 
-    PaymentStatus paymentStatus;
+    String paymentStatus;
 
     LocalDateTime updatedDate;
 

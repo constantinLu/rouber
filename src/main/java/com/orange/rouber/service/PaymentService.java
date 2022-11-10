@@ -28,7 +28,7 @@ public class PaymentService {
         final var unProcessedPayment = CorePaymentDto.builder()
                 .amount(processAuthorizationAmount(trip.getPrice()))
                 .requestId(UUID.randomUUID())
-                .paymentStatus(PENDING_AUTHORIZATION)
+                .paymentStatus(PENDING_AUTHORIZATION.name())
                 .reason(Optional.of("Start of trip authorization"))
                 .build();
 
