@@ -21,6 +21,8 @@ public class Trip {
 
     private BigDecimal price;
 
+    private Float rating;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "x", column = @Column(name = "start_lat")),
@@ -45,10 +47,3 @@ public class Trip {
 
 }
 
-@Embeddable
-@Getter
-@Setter
-class Point {
-    private BigDecimal x;
-    private BigDecimal y;
-}

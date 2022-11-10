@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Table(name = "vehicles")
 public class Vehicle {
 
-    enum State {
+    public enum State {
         ACTIVE,
         INACTIVE
     }
@@ -43,6 +43,6 @@ public class Vehicle {
     @JoinColumn(name = "driver_id")
     Driver driver;
 
-    @Enumerated(EnumType.STRING) //TODO: Verify this
+    @Enumerated(EnumType.STRING)
     State state;
 }
