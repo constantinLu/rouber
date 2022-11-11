@@ -49,7 +49,8 @@ public class TripService {
     public void startTrip(Long tripId, Long driverId) {
         final var assignedDriver = driverService.getDriver(driverId);
         final var currentTrip = tripRepository.findById(tripId);
-        currentTrip.ifPresent(trip -> {
+        if (currentTrip.isPresent()) {
+            final var trip = currentTrip.get();
             if (trip.getAssignedTo() == null) {
                 trip.setAssignedTo(assignedDriver);
                 trip.setStartTrip(LocalDateTime.now());
@@ -60,8 +61,10 @@ public class TripService {
             final var createdPayment = paymentService.createPayment(trip);
             trip.setPayment(createdPayment);
             tripRepository.save(trip);
-        });
 
+        } else {
+            throw new ValidationException("No trip available");
+        }
     }
 
     public void endTrip(Long tripId, Long driverId) {
