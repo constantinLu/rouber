@@ -18,11 +18,6 @@ public class DriverService {
         driverRepository.save(driver);
     }
 
-    public void rateDriver(Long driverId, Float rate) {
-        final var driver = getDriver(driverId);
-        driver.setRating(rate);
-        driverRepository.save(driver);
-    }
 
     public Driver getDriver(Long driverId) {
         return driverRepository.findById(driverId).orElseThrow();
