@@ -5,7 +5,6 @@ import com.orange.rouber.client.corepayments.CorePaymentResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -29,13 +28,13 @@ public class CorePaymentService {
         this.restTemplate = restTemplate;
     }
 
-    @Async
+
     public ResponseEntity<CorePaymentDto> authorizePayment(CorePaymentDto unprocessedPayment) {
         HttpEntity<CorePaymentDto> requestEntity = createRequestEntity(unprocessedPayment);
         return restTemplate.exchange(CORE_PAYMENTS, POST, requestEntity, CorePaymentDto.class);
     }
 
-    @Async
+
     public ResponseEntity<CorePaymentDto> confirmPayment(CorePaymentDto authorizedPayment) {
         HttpEntity<CorePaymentDto> requestEntity = createRequestEntity(authorizedPayment);
         return restTemplate.exchange(CORE_PAYMENTS, PUT, requestEntity, CorePaymentDto.class);
@@ -53,6 +52,7 @@ public class CorePaymentService {
 
         return restTemplate.exchange(url, GET, httpEntity, CorePaymentResponse.class, params);
     }
+
 
     private HttpEntity<CorePaymentDto> createRequestEntity(CorePaymentDto request) {
         return new HttpEntity<>(request, header());
